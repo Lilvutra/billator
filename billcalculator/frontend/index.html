@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billator</title>
+  <style>
+    /* Add your custom CSS styles here */
+  </style>
+</head>
+<body>
+  <h1>Billator</h1>
+  <form id="billingForm">
+    <input type="file" id="billImage" accept="image/*" required>
+    <button type="submit">Process Bill</button>
+  </form>
+
+  <div id="resultContainer" style="display: none;">
+    <h2>Bill Information</h2>
+    <ul id="billInfo"></ul>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    // Handle form submission
+    $('#billingForm').submit(function(e) {
+      e.preventDefault();
+      
+      // Get the selected bill image file
+      const billImage = $('#billImage')[0].files[0];
+      
+      // Create a FormData object to send the image file to the server
+      const formData = new FormData();
+      formData.append('billImage', billImage);
+      
+      // Send the image file to the server for processing
+      $.ajax({
+        url: '/process-bill',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          displayBillInfo(response);
+        },
+        error: function(error) {
+          console.error(error);
+        }
+      });
+    });
+
+    // Display parsed bill information
+    function displayBillInfo(billInfo) {
+      const billInfoContainer = $('#billInfo');
+      billInfoContainer.empty();
+      
+      // Iterate over the parsed information and create list items
+      for (const [key, value] of Object.entries(billInfo)) {
+        const listItem = $('<li></li>').text(`${key}: ${value}`);
+        billInfoContainer.append(listItem);
+      }
+      
+      // Show the result container
+      $('#resultContainer').show();
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
